@@ -1,0 +1,53 @@
+run:
+  dir: logs/run/${task_type}/${task}/${method}/${p.rs}/O${hydra.job.override_dirname}/seed=${seed}/${now:%m%d_%H%M%S}
+sweep:
+  dir: logs/${mode}/${task_type}/${task}/${method}/${p.rs}
+  subdir: O${hydra.job.override_dirname}/seed=${seed}/${now:%m%d_%H%M%S}
+output_subdir: null
+job_logging:
+  loggers:
+    fontTools.subset:
+      level: ERROR
+      handlers: [console, file]
+      propagate: False
+job:
+  chdir: false
+  config:
+    override_dirname:
+      exclude_keys:
+        - mode
+        - task_type
+        - task
+        - method
+        - c
+        - c.max_epoch
+        # - c.ept
+        # - c.n_env
+        - c.test_buffer_size
+        - c.n_test_env
+        # - c.spc
+        # - c.tt
+        - p
+        - p.rs
+        # - p.norm_obs
+        - seed
+        - device
+        - show_progress
+        - pid_bias
+        - bind_core
+        - video
+        - test_after_each_epoch
+        - resume_path
+        - verbose
+        - save_state
+        - state_map
+        - record_traj
+        - xlims
+        - ylims
+        - low_agent_path
+        - zz
+        - tl
+        - fig_title
+        - save_pdf
+        - use_envpool
+        - resume
