@@ -3,8 +3,8 @@
 ## Env Setup
 
 ```bash
-conda create -n cimv2 python=3.9
-conda activate cimv2
+conda create -n cim python=3.9
+conda activate cim
 
 pip install -U pip
 pip install ipykernel ipywidgets black isort setuptools autoroot
