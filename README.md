@@ -1,4 +1,4 @@
-# CIMv2
+# Constrained Intrinsic Motivation for Reinforcement Learning
 
 ## Env Setup
 
