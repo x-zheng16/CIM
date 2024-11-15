@@ -10,19 +10,16 @@ This paper investigates two fundamental problems that arise when utilizing Intri
 ## Environments
 
 ```bash
-conda create -n cim python=3.9
+conda env create -f environment.yaml
 conda activate cim
-conda install libstdcxx-ng -c conda-forge
+```
 
-pip install -U pip
-pip install ipykernel ipywidgets isort setuptools autoroot
-pip install hydra-core hydra-colorlog fast-histogram pykeops
-pip install seaborn matplotlib
-pip install "numpy<2"
-pip install mujoco==2.3.3
-pip install gymnasium==0.28.1
-pip install tianshou==0.5.0
-pip install envpool
-# apt install cmake git libboost-all-dev libsdl2-dev libopenal-dev
-# pip install opencv-python vizdoom
+## Run
+
+```bash
+## test the vanilla PPO
+python src/train.py -m task_type=gym task=Ant-v4 tl=200 method=base p.rf_rate=0
+
+## unsupervised skill discovery via CIM
+python src/train.py -m task_type=gym task=Ant-v4 tl=200 method=cim p.sd=2 p.ro=1 c.tt=2a7 c.spc="512*64"
 ```
