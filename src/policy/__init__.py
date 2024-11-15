@@ -1,16 +1,15 @@
 import numpy as np
 import torch
 from tianshou.data import Batch
-from tianshou.policy import BasePolicy
 
 from src.policy.cim import CIMPPOPolicy
-from src.policy.ppo import PPOPolicy
+from src.policy.ppo import CustomBasePolicy, PPOPolicy
 
 
 POLICY_DICT = {"cim": CIMPPOPolicy, "base": PPOPolicy}
 
 
-class RandomPolicy(BasePolicy):
+class RandomPolicy(CustomBasePolicy):
     def __init__(self, cfg):
         super().__init__(cfg.obs_space, cfg.act_space, cfg.p.action_scaling, cfg.p.action_bound_method)
         self.act_shape = cfg.act_space.shape or cfg.act_space.n

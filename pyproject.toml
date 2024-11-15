@@ -5,6 +5,7 @@ requires-python = ">=3.9"
 line-length = 120
 cache-dir = "~/.cache/ruff"
 src = ["src"]
+extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
 ignore = [

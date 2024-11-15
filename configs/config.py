@@ -60,8 +60,8 @@ class Config:
     save_state: bool = False
     state_map: bool = True
     test_after_each_epoch: bool = True
-    record_traj: bool = True
-    colorful_traj: bool = True
+    record_traj: bool = False
+    colorful_traj: bool = False
     visual_endpoint: bool = False
     eval: bool = False
     verbose: bool = True

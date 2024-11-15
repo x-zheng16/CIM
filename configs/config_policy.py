@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
+
 
 REW_SCHEDULE = ["RF", "PConst", "PLinear", "PExp", "L"]
 REW_TYPE = ["v"]
@@ -21,7 +22,7 @@ class ContinuousPPOConf:
     deterministic_eval: bool = True
 
     # common
-    prior_dims: Optional[List[int]] = None
+    prior_dims: Optional[list[int]] = None
     use_prior_as_input: Optional[bool] = False
     sd: int = 0  # skill dim
     ro: bool = False  # gen random option

@@ -15,8 +15,19 @@ from src.utils.common import get_dist_fn, grad_monitor, last_layer_init, param_m
 from src.utils.net import get_actor_critic, get_encoder
 
 
+class CustomBasePolicy(BasePolicy):
+    def __init__(self, obs_space, act_space, action_scaling, action_bound_method, lr_scheduler=None):
+        super().__init__(
+            action_space=act_space,
+            observation_space=obs_space,
+            action_scaling=action_scaling,
+            action_bound_method=action_bound_method,
+            lr_scheduler=lr_scheduler,
+        )
+
+
 # Proximal Policy Optimization (PPO)
-class PPOPolicy(BasePolicy):
+class PPOPolicy(CustomBasePolicy):
     def __init__(self, cfg):
         # basic
         super().__init__(cfg.obs_space, cfg.act_space, cfg.p.action_scaling, cfg.p.action_bound_method)

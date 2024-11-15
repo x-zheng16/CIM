@@ -20,7 +20,7 @@ class Collector(tianshou.data.Collector):
         self.task_type = cfg.task_type
         self.task = cfg.task
         self.state_map = cfg.state_map
-        super().__init__(policy, env, buffer, None, False)
+        super().__init__(policy=policy, env=env, buffer=buffer, exploration_noise=False)
         self.last_rew = self.last_len = self.last_success_rate = 0.0
         self.cos = torch.nn.CosineSimilarity()
         self.time_limit = cfg.time_limit
@@ -143,7 +143,7 @@ class Collector(tianshou.data.Collector):
                 if skill_dict is not None:
                     for i in env_ind_local:
                         option = self.data.info["option"][i]
-                        skill = "_".join(map(lambda x: str(np.round(x.item(), 1)), option))
+                        skill = "_".join(str(np.round(x.item(), 1)) for x in option)
                         skill_dict[skill].append(ep_rew[i])
 
                 # now we copy obs_next to obs, but since there might be
@@ -187,7 +187,7 @@ class Collector(tianshou.data.Collector):
             self.reset_env()
 
         if episode_count > 0:
-            rews, lens, idxs = map(np.concatenate, [episode_rews, episode_lens, episode_start_indices])
+            rews, lens, _ = map(np.concatenate, [episode_rews, episode_lens, episode_start_indices])
             rew_mean, rew_std = rews.mean(), rews.std()
             len_mean, len_std = lens.mean(), lens.std()
             extra_infos = {}
@@ -196,7 +196,7 @@ class Collector(tianshou.data.Collector):
             extra_infos = {k: extra_infos[k] for k in sorted(extra_infos)}
             self.last_rew, self.last_len = rew_mean, len_mean
         else:
-            rews, lens, idxs = np.array([]), np.array([], int), np.array([], int)
+            rews, lens, _ = np.array([]), np.array([], int), np.array([], int)
             rew_mean, len_mean = self.last_rew, self.last_len
             rew_std = len_std = 0
             extra_infos = {}
@@ -211,7 +211,8 @@ class Collector(tianshou.data.Collector):
         self.last_success_rate = success_rate
         if self.task in ["Ant-v4", "Humanoid-v4", "FetchPush-v2", "FetchSlide-v2"]:
             x, y = batch.info["x_position"], batch.info["y_position"]
-            H = histogram2d(x, y)
+            _, _, xlims, ylims, _, bins, _ = get_visual_config(self.task)
+            H = histogram2d(x, y, bins, [xlims, ylims])
             sc = (H > 0).sum()
             extra_infos["sc"] = str(sc)
         collect_result = {
@@ -231,3 +232,30 @@ class Collector(tianshou.data.Collector):
             "success_rate": float(success_rate),
         }
         return collect_result
+
+
+def get_visual_config(env_name):
+    xkey, ykey = "x", "y"
+    xlims = ylims = goal = None
+    n_locator = 5
+    if env_name in ["Ant-v4"]:
+        xlims = ylims = (-60, 60)
+        n_locator = 6 + 1
+        bins = (n_locator - 1) * 2 * 4
+    elif env_name in ["Humanoid-v4"]:
+        xlims = ylims = (-100, 100)
+        n_locator = 10 + 1
+        bins = (n_locator - 1) * 2 * 4
+    elif env_name in ["FetchPush-v2"]:
+        xlims = (0.5, 2)
+        ylims = (0, 1.5)
+        n_locator = 11
+        bins = 15
+    elif env_name in ["FetchSlide-v2"]:
+        xlims = (0.5, 2)
+        ylims = (0, 1.5)
+        n_locator = 11
+        bins = 15
+    else:
+        bins = (n_locator - 1) * 2 * 4
+    return xkey, ykey, xlims, ylims, goal, bins, n_locator

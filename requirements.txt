@@ -1,7 +1,0 @@
-tianshou
-hydra-core
-hydra-colorlog
-autoroot
-fast-histogram
-pykeops
-seaborn
