@@ -10,16 +10,16 @@ This paper investigates two fundamental problems that arise when utilizing Intri
 ## Environment
 
 ```bash
-conda env create -f environment.yaml
+conda env create -f environment.yml -n cim
 conda activate cim
 ```
 
 ## Run
 
 ```bash
-## test the vanilla PPO
+## Test vanilla PPO
 python src/train.py -m task_type=gym task=Ant-v4 tl=200 method=base p.rf_rate=0
 
-## unsupervised skill discovery via CIM
+## Run CIM for unsupervised skill discovery
 python src/train.py -m task_type=gym task=Ant-v4 tl=200 method=cim p.sd=2 p.ro=1 c.tt=2a7 c.spc="512*64"
 ```
