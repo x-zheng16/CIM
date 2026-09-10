@@ -3,6 +3,7 @@
 *.pkl
 *.pth
 logs/*
+memory/
 *.json
 *.sh
 *.log
